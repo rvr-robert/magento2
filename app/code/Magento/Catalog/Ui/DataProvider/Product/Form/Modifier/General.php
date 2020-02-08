@@ -76,8 +76,12 @@ class General extends AbstractModifier
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
                 ProductAttributeInterface::CODE_STATUS
             );
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] =
-                $attributeStatus->getDefaultValue() ?: 1;
+            if(!empty($this->locator->getProduct()->getStatus())) {
+                $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = $this->locator->getProduct()->getStatus();
+            } else {
+                $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] =
+                    $attributeStatus->getDefaultValue() ?: 2;
+            }
         }
 
         return $data;
