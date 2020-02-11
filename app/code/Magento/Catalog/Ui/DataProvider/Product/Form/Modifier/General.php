@@ -71,17 +71,17 @@ class General extends AbstractModifier
         $data = $this->customizeWeightFormat($data);
         $data = $this->customizeAdvancedPriceFormat($data);
         $modelId = $this->locator->getProduct()->getId();
+        $status = $this->locator->getProduct()->getStatus();
 
-        $productStatus = $this->locator->getProduct()->getStatus();
-        if (!empty($productStatus) && !empty($modelId)) {
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = $productStatus;
+        if(!empty($status) && !empty($modelId)) {
+            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = $status;
         } elseif (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS])) {
             $attributeStatus = $this->attributeRepository->get(
                 ProductAttributeInterface::ENTITY_TYPE_CODE,
                 ProductAttributeInterface::CODE_STATUS
             );
             $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] =
-                $attributeStatus->getDefaultValue() ?: 1;
+                $attributeStatus->getDefaultValue() ?: 2;
         }
 
         return $data;
